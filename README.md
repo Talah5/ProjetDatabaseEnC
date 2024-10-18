@@ -5,7 +5,7 @@
 
 Ce projet consiste à implémenter une base de données simple en C, avec des fonctionnalités basiques comme les commandes SQL `INSERT` et `SELECT`. Le projet utilisera un **arbre binaire** pour stocker les données et permettra une **persistance des données** sur disque.
 
-Ce projet est réalisé dans le cadre du cours de Systèmes d'Information à l'ESGI.
+Ce projet est réalisé dans le cadre du cours de Langage C et Algorithmie à l'ESGI.
 
 ## Structure du projet
 
@@ -73,7 +73,7 @@ Des tests seront implémentés dans le répertoire `tests/`. Pour l'instant, ils
 
 ## Contributeurs
 
-Projet réalisé par **Talah** dans le cadre du cours à l'ESGI.
+Projet réalisé par **Talah** dans le cadre du cours Langage C et Algorithmie à l'ESGI.
 
 ## Licence
 
