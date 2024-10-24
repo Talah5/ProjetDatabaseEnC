@@ -1,11 +1,10 @@
-
 # ProjetDBenC
 
 ## Description
 
-Ce projet consiste à implémenter une base de données simple en C, avec des fonctionnalités basiques comme les commandes SQL `INSERT` et `SELECT`. Le projet utilisera un **arbre binaire** pour stocker les données et permettra une **persistance des données** sur disque.
+Ce projet implémente une **base de données simple** en C, avec des fonctionnalités basiques inspirées des commandes SQL telles que `INSERT`, `SELECT`, `DELETE` et `UPDATE`. Les enregistrements sont stockés dans un **arbre binaire de recherche** pour optimiser les opérations de recherche et d'insertion, et les données peuvent être **persistées sur disque** via un fichier binaire.
 
-Ce projet est réalisé dans le cadre du cours de Langage C et Algorithmie à l'ESGI.
+Ce projet est réalisé dans le cadre du cours de **Langage C et Algorithmie** à l'ESGI.
 
 ## Structure du projet
 
@@ -16,14 +15,30 @@ Voici la structure actuelle du projet :
 - **tests/** : Contiendra les fichiers de test.
 - **Makefile** : Utilisé pour compiler automatiquement le projet.
 
+## Fonctionnalités
+
+- **Insertion** (`INSERT`) : Ajoute des enregistrements avec un identifiant unique et un nom.
+- **Sélection** (`SELECT`) : Recherche un enregistrement par identifiant et affiche les résultats.
+- **Affichage** : Affiche tous les enregistrements stockés dans l'arbre binaire par ordre croissant d'identifiants.
+- **Mise à jour** (`UPDATE`) : Permet de modifier le nom d'un enregistrement existant.
+- **Suppression** (`DELETE`) : Supprime un enregistrement par son identifiant.
+- **Persistance des données** : Sauvegarde et chargement des enregistrements depuis un fichier binaire pour conserver les données entre les exécutions du programme.
+- **Gestion de la mémoire** : Libération automatique de la mémoire allouée aux enregistrements.
+
+## Structure des fichiers
+
+- **table.h** : Déclarations des structures de données et prototypes des fonctions.
+- **table.c** : Implémentation des fonctions de gestion de la table et de l'arbre binaire.
+- **main.c** : Programme principal pour exécuter les opérations sur la base de données.
+
 ## Installation et Compilation
 
 ### Prérequis
 
-Assurez-vous d'avoir installé les outils suivants sur votre machine :
+Assurez-vous d'avoir les outils suivants installés sur votre machine :
 
-- **gcc** : Un compilateur C.
-- **make** : Outil pour automatiser la compilation.
+- **gcc** : Compilateur C.
+- **make** : Utilisé pour automatiser la compilation.
 
 ### Étapes
 
@@ -32,7 +47,6 @@ Assurez-vous d'avoir installé les outils suivants sur votre machine :
    ```bash
    git clone https://github.com/Talah5/ProjetDBenC.git
    cd ProjetDBenC
-   ```
 
 2. **Compilation** :
    Utilisez `make` pour compiler le projet.
@@ -55,13 +69,14 @@ Assurez-vous d'avoir installé les outils suivants sur votre machine :
    make clean
    ```
 
-## Fonctionnalités
+## Exemple d'utilisation
 
-- Implémentation des structures de données pour les tables et les lignes.
-- Commande SQL `INSERT` pour ajouter des données dans la table.
-- Commande SQL `SELECT` pour interroger les données dans la table.
-- Utilisation d'un **arbre binaire** pour optimiser le stockage et la recherche de données.
-- Persistance des données sur disque pour conserver les informations même après l'arrêt du programme.
+Une fois le programme lancé, vous pouvez :
+
+1. Insérer des enregistrements dans la base de données.
+2. Afficher les enregistrements triés par identifiant.
+3. Supprimer ou mettre à jour des enregistrements existants.
+4. Sauvegarder les enregistrements dans un fichier binaire pour les charger lors de la prochaine exécution.
 
 ## Dépendances
 
