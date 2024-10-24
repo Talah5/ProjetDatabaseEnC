@@ -158,6 +158,21 @@ Node* delete_node(Node* root, int id) {
 }
 
 int delete_row(Table* table, int id) {
+    if (select_row(table, id) == NULL) {
+        printf("Erreur : Aucun élément trouvé avec l'ID = %d\n", id);
+        return 0;
+    }
     table->root = delete_node(table->root, id);
     return 1;  // Succès
+}
+
+// Fonction de mise à jour d'une ligne existante
+int update_row(Table* table, int id, const char* new_name) {
+    Row* row = select_row(table, id);  // Recherche la ligne par ID
+    if (row != NULL) {
+        strncpy(row->name, new_name, 100);  // Met à jour le nom
+        return 1;  // Succès
+    }
+    printf("Erreur : Aucun élément trouvé avec l'ID = %d\n", id);
+    return 0;  // Échec : ligne non trouvée
 }

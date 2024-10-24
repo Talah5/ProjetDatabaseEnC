@@ -24,9 +24,10 @@ Table* create_table();
 void free_table(Table* table);
 int insert_row(Table* table, int id, const char* name);
 Row* select_row(const Table* table, int id);
-int delete_row(Table* table, int id);  // Nouveau : suppression de ligne
+int delete_row(Table* table, int id);
+int update_row(Table* table, int id, const char* new_name);  // Nouveau : mise à jour
 void print_table(const Table* table);
-int save_table_to_file(const Table* table, const char* filename);  // Nouveau : persistance
-int load_table_from_file(Table* table, const char* filename);  // Nouveau : recharger la table
+int save_table_to_file(const Table* table, const char* filename);
+int load_table_from_file(Table* table, const char* filename);
 
 #endif

@@ -27,10 +27,22 @@ int main() {
     printf("\nTable après chargement des données :\n");
     print_table(new_table);
 
+    // Tester la mise à jour (UPDATE)
+    printf("\nMise à jour de l'ID = 1 (Alice -> Alicia) :\n");
+    update_row(new_table, 1, "Alicia");
+    print_table(new_table);
+
     // Tester la suppression
     delete_row(new_table, 2);
     printf("\nTable après suppression de l'ID = 2 :\n");
     print_table(new_table);
+
+    // Tester des erreurs de suppression et de mise à jour
+    printf("\nTentative de suppression de l'ID = 99 (inexistant) :\n");
+    delete_row(new_table, 99);
+
+    printf("\nTentative de mise à jour de l'ID = 99 (inexistant) :\n");
+    update_row(new_table, 99, "Inexistant");
 
     // Libérer la mémoire
     free_table(new_table);
