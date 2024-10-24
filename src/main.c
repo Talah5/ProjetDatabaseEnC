@@ -1,51 +1,58 @@
 #include <stdio.h>
-#include "table.h"
+#include "table.h"  // Assure-toi que le nom de ton fichier d'en-tête est correct
 
 int main() {
-    // Créer une table (arbre binaire vide)
-    Table* table = create_table();
+    // Initialiser une table d'enregistrements vide (arbre binaire)
+    Table* records = create_table();
 
-    // Insérer des lignes
-    insert_row(table, 1, "Alice");
-    insert_row(table, 2, "Bob");
-    insert_row(table, 3, "Charlie");
+    if (records == NULL) {
+        fprintf(stderr, "Erreur : Impossible d'initialiser la table.\n");
+        return 1;
+    }
 
-    // Afficher la table
-    printf("Contenu de la table après insertion :\n");
-    print_table(table);
+    // Insérer des données d'utilisateur
+    insert_row(records, 1001, "Bastien");
+    insert_row(records, 1002, "Sebastien");
+    insert_row(records, 1003, "Michel");
 
-    // Sauvegarder les données dans un fichier
-    save_table_to_file(table, "data.bin");
+    // Afficher les enregistrements dans la table
+    printf("Contenu de la table d'enregistrements :\n");
+    print_table(records);
 
-    // Libérer la mémoire
-    free_table(table);
+    // Sauvegarder les données dans un fichier binaire
+    if (!save_table_to_file(records, "records.dat")) {
+        fprintf(stderr, "Erreur : Impossible de sauvegarder les enregistrements dans le fichier.\n");
+    }
 
-    // Charger les données depuis le fichier
-    Table* new_table = create_table();
-    load_table_from_file(new_table, "data.bin");
+    // Libérer la mémoire de la table actuelle
+    free_table(records);
 
-    printf("\nTable après chargement des données :\n");
-    print_table(new_table);
+    // Charger les enregistrements à partir du fichier dans une nouvelle table
+    Table* loaded_records = create_table();
+    if (loaded_records == NULL) {
+        fprintf(stderr, "Erreur : Impossible d'initialiser la table pour le chargement.\n");
+        return 1;
+    }
 
-    // Tester la mise à jour (UPDATE)
-    printf("\nMise à jour de l'ID = 1 (Alice -> Alicia) :\n");
-    update_row(new_table, 1, "Alicia");
-    print_table(new_table);
+    if (!load_table_from_file(loaded_records, "records.dat")) {
+        fprintf(stderr, "Erreur : Impossible de charger les enregistrements à partir du fichier.\n");
+        free_table(loaded_records);
+        return 1;
+    }
 
-    // Tester la suppression
-    delete_row(new_table, 2);
-    printf("\nTable après suppression de l'ID = 2 :\n");
-    print_table(new_table);
+    printf("\nEnregistrements chargés depuis le fichier :\n");
+    print_table(loaded_records);
 
-    // Tester des erreurs de suppression et de mise à jour
-    printf("\nTentative de suppression de l'ID = 99 (inexistant) :\n");
-    delete_row(new_table, 99);
+    // Supprimer un enregistrement par ID et afficher la table mise à jour
+    if (!delete_row(loaded_records, 1002)) {
+        fprintf(stderr, "Erreur : Enregistrement avec ID 1002 introuvable.\n");
+    } else {
+        printf("\nTable après suppression de l'enregistrement avec ID 1002 :\n");
+        print_table(loaded_records);
+    }
 
-    printf("\nTentative de mise à jour de l'ID = 99 (inexistant) :\n");
-    update_row(new_table, 99, "Inexistant");
-
-    // Libérer la mémoire
-    free_table(new_table);
+    // Libérer la mémoire et quitter
+    free_table(loaded_records);
 
     return 0;
 }
