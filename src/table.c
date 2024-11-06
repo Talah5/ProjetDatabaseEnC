@@ -3,109 +3,116 @@
 #include <string.h>
 #include "table.h"
 
-// Créer un nœud de l'arbre binaire
+// Fonction pour créer un nœud dans l'arbre binaire
 Node* create_node(int id, const char* name) {
     Node* new_node = malloc(sizeof(Node));
     if (!new_node) {
-        printf("Erreur : Impossible d'allouer de la mémoire.\n");
-        exit(1);  // Quitte le programme en cas d'échec
+        printf("Erreur : Impossible d'allouer de la mémoire pour un nouveau nœud.\n");
+        exit(1);  // Quitte le programme si allocation échoue
     }
     new_node->data.id = id;
-    strncpy(new_node->data.name, name, 100);  // Copie le nom dans la structure
-    new_node->left = new_node->right = NULL;  // Pas de sous-arbres pour le moment
+    strncpy(new_node->data.name, name, 100);  // Copie le nom de manière sécurisée
+    new_node->left = new_node->right = NULL;  // Pas de sous-arbres au départ
     return new_node;
 }
 
-// Insérer un nœud dans l'arbre binaire
+// Fonction pour insérer un nœud dans l'arbre binaire
 Node* insert_node(Node* root, int id, const char* name) {
     if (root == NULL) {
-        return create_node(id, name);  // Si l'arbre est vide, crée un nouveau nœud
+        return create_node(id, name);  // Crée un nouveau nœud si arbre vide
     }
 
-    // Insère à gauche ou à droite selon la valeur de l'ID
+    // Place le nœud à gauche ou à droite selon l'ID
     if (id < root->data.id) {
         root->left = insert_node(root->left, id, name);
     } else if (id > root->data.id) {
         root->right = insert_node(root->right, id, name);
+    } else {
+        printf("Info : ID %d déjà présent, insertion ignorée.\n", id);
     }
-    return root;  // Retourne la racine (inchangée)
+    return root;  // Retourne la racine sans modification
 }
 
+// Fonction pour insérer une ligne dans la table
 int insert_row(Table* table, int id, const char* name) {
-    table->root = insert_node(table->root, id, name);  // Insère dans la racine
-    return 1;  // Toujours un succès (dans ce cas)
+    table->root = insert_node(table->root, id, name);
+    return 1;  // Indique toujours un succès
 }
 
-// Rechercher une ligne par ID dans l'arbre binaire
+// Recherche un nœud par ID
 Row* search_node(Node* root, int id) {
     if (root == NULL) {
-        return NULL;  // Retourne NULL si la ligne n'est pas trouvée
+        printf("Info : Nœud non trouvé pour l'ID %d.\n", id);
+        return NULL;  // Retourne NULL si non trouvé
     }
     if (id == root->data.id) {
-        return &root->data;  // Retourne les données si l'ID correspond
+        return &root->data;  // Renvoie les données si l'ID correspond
     }
     if (id < root->data.id) {
-        return search_node(root->left, id);  // Cherche dans le sous-arbre gauche
+        return search_node(root->left, id);  // Recherche à gauche
     } else {
-        return search_node(root->right, id);  // Cherche dans le sous-arbre droit
+        return search_node(root->right, id);  // Recherche à droite
     }
 }
 
+// Fonction pour rechercher une ligne dans la table
 Row* select_row(const Table* table, int id) {
-    return search_node(table->root, id);  // Recherche une ligne à partir de la racine
+    return search_node(table->root, id);  // Lance la recherche depuis la racine
 }
 
-// Afficher les lignes de l'arbre en ordre croissant
+// Fonction pour afficher l'arbre en ordre croissant
 void print_inorder(Node* root) {
     if (root != NULL) {
-        print_inorder(root->left);  // Affiche le sous-arbre gauche
-        printf("ID: %d, Nom: %s\n", root->data.id, root->data.name);  // Affiche le nœud courant
-        print_inorder(root->right);  // Affiche le sous-arbre droit
+        print_inorder(root->left);
+        printf("ID: %d, Nom: %s\n", root->data.id, root->data.name);
+        print_inorder(root->right);
     }
 }
 
+// Afficher toutes les lignes de la table
 void print_table(const Table* table) {
-    print_inorder(table->root);  // Affiche toutes les lignes
+    printf("Affichage de la table :\n");
+    print_inorder(table->root);
 }
 
-// Créer une table (arbre binaire vide)
+// Créer une table vide
 Table* create_table() {
-    Table* table = malloc(sizeof(Table));  // Alloue de la mémoire pour la table
+    Table* table = malloc(sizeof(Table));
     if (!table) {
-        printf("Erreur : Impossible d'allouer de la mémoire pour la table.\n");
-        exit(1);  // Quitte le programme en cas d'échec
+        printf("Erreur : Impossible d'allouer la mémoire pour la table.\n");
+        exit(1);
     }
-    table->root = NULL;  // L'arbre est vide au début
+    table->root = NULL;
     return table;
 }
 
-// Libérer la mémoire allouée à l'arbre binaire
+// Fonction pour libérer la mémoire de l'arbre
 void free_nodes(Node* root) {
     if (root != NULL) {
-        free_nodes(root->left);  // Libère le sous-arbre gauche
-        free_nodes(root->right);  // Libère le sous-arbre droit
-        free(root);  // Libère le nœud courant
+        free_nodes(root->left);
+        free_nodes(root->right);
+        free(root);
     }
 }
 
+// Libérer la mémoire allouée pour la table
 void free_table(Table* table) {
     if (table) {
-        free_nodes(table->root);  // Libère tous les nœuds
-        free(table);  // Libère la structure de la table elle-même
+        printf("Libération de la mémoire de la table.\n");
+        free_nodes(table->root);
+        free(table);
     }
 }
 
-// Supprimer un nœud dans l'arbre binaire
+// Fonction pour supprimer un nœud par ID
 Node* delete_node(Node* root, int id) {
     if (root == NULL) return root;
 
-    // Cherche le nœud à supprimer
     if (id < root->data.id) {
         root->left = delete_node(root->left, id);
     } else if (id > root->data.id) {
         root->right = delete_node(root->right, id);
     } else {
-        // Nœud trouvé
         if (root->left == NULL) {
             Node* temp = root->right;
             free(root);
@@ -116,33 +123,35 @@ Node* delete_node(Node* root, int id) {
             return temp;
         }
 
-        // Nœud avec deux enfants : trouve le plus petit dans le sous-arbre droit
         Node* temp = root->right;
         while (temp && temp->left != NULL) {
             temp = temp->left;
         }
-        root->data = temp->data;  // Remplace les données par celles du successeur
-        root->right = delete_node(root->right, temp->data.id);  // Supprime le successeur
+        root->data = temp->data;
+        root->right = delete_node(root->right, temp->data.id);
     }
     return root;
 }
 
+// Fonction pour supprimer une ligne de la table
 int delete_row(Table* table, int id) {
+    printf("Suppression de la ligne avec l'ID %d.\n", id);
     if (select_row(table, id) == NULL) {
-        printf("Erreur : Aucun élément trouvé avec l'ID = %d\n", id);
-        return 0;  // Échec : ligne non trouvée
+        printf("Erreur : Aucun élément trouvé avec l'ID %d\n", id);
+        return 0;
     }
-    table->root = delete_node(table->root, id);  // Supprime la ligne
-    return 1;  // Succès
+    table->root = delete_node(table->root, id);
+    return 1;
 }
 
-// Mettre à jour une ligne existante
+// Fonction pour mettre à jour une ligne dans la table
 int update_row(Table* table, int id, const char* new_name) {
-    Row* row = select_row(table, id);  // Recherche la ligne
+    Row* row = select_row(table, id);
     if (row != NULL) {
-        strncpy(row->name, new_name, 100);  // Met à jour le nom
-        return 1;  // Succès
+        strncpy(row->name, new_name, 100);
+        printf("Mise à jour : ID %d a maintenant le nom %s.\n", id, new_name);
+        return 1;
     }
-    printf("Erreur : Aucun élément trouvé avec l'ID = %d\n", id);
-    return 0;  // Échec
+    printf("Erreur : Aucun élément trouvé avec l'ID %d\n", id);
+    return 0;
 }
