@@ -88,7 +88,7 @@ Des tests seront implémentés dans le répertoire `tests/`. Pour l'instant, ils
 
 ## Contributeurs
 
-Projet réalisé par **Talah** dans le cadre du cours Langage C et Algorithmie à l'ESGI.
+Projet réalisé par **Bastien HOURY** dans le cadre du cours Langage C et Algorithmie à l'ESGI.
 
 ## Licence
 
